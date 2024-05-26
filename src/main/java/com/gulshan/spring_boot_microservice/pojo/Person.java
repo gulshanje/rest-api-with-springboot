@@ -1,7 +1,5 @@
 package com.gulshan.spring_boot_microservice.pojo;
 
-import java.util.Optional;
-
 public class Person {
 
     private String firstName;

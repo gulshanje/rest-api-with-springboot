@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -30,11 +31,15 @@ public class Controller {
     //
     @GetMapping("/printMessage/fn/{firstName}/ln/{lastName}")
     public ResponseEntity<Person> printMessage(
+            @RequestHeader(value = "clientId", required = true) String clientId,
             @PathVariable(value = "firstName") String firstName,
             @PathVariable(value = "lastName") String lastName,
             @RequestParam Optional<String> age) {
 
         Person person = personComponent.getPerson(firstName, lastName, age);
+        if (clientId.equalsIgnoreCase("mursu")) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
         if (person != null) {
             return ResponseEntity.status(HttpStatus.OK).body(person);
         } else {
